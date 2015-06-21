@@ -1,0 +1,60 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>手风琴效果</title>
+	<style type="text/css">
+	*{margin: 0; padding: 0}
+	ul{list-style: none;}
+	#box{
+	width: 1020px;
+	height: 400px;
+	margin: 100px auto;
+	border: 1px solid gold;
+	overflow: hidden;
+}
+	#box li{
+	float: left;
+	height: 400px;
+	cursor: pointer;
+	overflow: hidden;
+}
+	</style>
+<script type="text/javascript" src="http://www.w3school.com.cn/jquery/jquery.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		var speed=500;
+		var Licount=$("#box li").length;
+		var boxwidth=$("#box").width();//元素宽度，不含填充和边框
+		//var Innerwidth=$("#box").innerHeight(); //元素宽度+内填充（padding）
+		//var Innerwidth=$("#box").outerWidth();  //元素宽度+内填充（padding）+边框(border)
+		var InWidth=parseInt(boxwidth/Licount);
+		$("#box li").width(InWidth);
+		var aniWidth=parseInt((boxwidth-600)/(Licount-1))+"px";
+		$("#box li").hover(function() {
+			$(this).stop().animate({width:"600px"},speed).siblings().stop().animate({width:aniWidth},speed)// 当鼠标移动到li上，当前变600 其余的兄弟变90
+		}, function() {
+			$("#box li").stop().animate({width:InWidth},speed)
+			// 鼠标离开的时候，快速复原
+		});
+
+
+	});
+	</script>
+
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li><img src="images/54086bf0178e7.jpg" width="1100" height="1634" /></li>
+			<li><img src="images/section2.jpg" width="1600" height="850" /></li>
+			<li><img src="images/54086bf0178e7.jpg" width="1100" height="1634" /></li>
+			<li><img src="images/section2.jpg" width="1600" height="850" /></li>
+            <li><img src="images/54086bf0178e7.jpg" width="1100" height="1634" /></li>
+       <li><img src="images/section2.jpg" width="1600" height="850" /></li>
+            <li><img src="images/54086bf0178e7.jpg" width="1100" height="1634" /></li>
+		</ul>
+	</div>
+</body>
+</html>
