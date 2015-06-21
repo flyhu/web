@@ -56,16 +56,15 @@ function pubuliu(target){
 			}
 		else{
 			min_H =Math.min.apply(null,h) ;//取得数组中的最小值，区块中高度值最小的那个
-			minKey = getarraykey(h, min_H);//最小的值对应的指针
+			minKey = h.indexOf(min_H);;//最小的值对应的指针
 			h[minKey] += li_H ;//加上新高度后更新高度值
 			li.eq(i).css("top",min_H);//先得到高度最小的Li，然后把接下来的li放到它的下面
 			li.eq(i).css("left",minKey * li_W);	//第i个li的左坐标就是i*li的宽度
 		}
 		
 	}
+
 }
-/* 使用for in运算返回数组中某一值的对应项数(比如算出最小的高度值是数组里面的第几个) */
-function getarraykey(s, v) {for(k in s) {if(s[k] == v) {return k;}}}
 </script>
 </head>
 <body>
