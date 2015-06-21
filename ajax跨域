@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>异步同步</title>
+<script src="1.8.3.jquery.min.js">
+</script>
+<script>
+$(function() {  
+
+$("button").click(function(){
+	var offSet=$(".list").length;
+$.ajax({  
+type: "GET", 
+async: false,  
+url: "http://127.0.0.1/ajax/jsonp2.php",  
+dataType: "jsonp", 
+data: {id:"7",offset:offSet},
+success: function(data){ 
+var html = '';
+$.each(data, function(index, value){
+                     html += '<div class="list"><p><b>' + data[index].id+'.</b>'+data[index].title'</p></div>';
+                         });
+                         $('#backdata').append(html); 
+$("#backdata").css({color: "green"});  
+} ,
+error :function(XMLHttpRequest, textStatus, errorThrown){
+          //通常情况下textStatus和errorThrown只有其中一个包含信息
+          this;   //调用本次ajax请求时传递的options参数
+		 // alert(responseText);//请求返回的内容
+        alert(textStatus);//请求状态：success，error
+       //alert(XMLHttpRequest);//XMLHttpRequest对象
+	   //alert("异常");
+       }
+});  
+
+}); }); 
+</script>
+</head>
+
+<body>
+<div align="center"><button>更多</button></div>
+<div id="list">
+<div>第一</div>
+<div id="backdata"></div>
+</div>
+
+
+</body>
+</html>
