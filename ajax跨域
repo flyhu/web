@@ -19,7 +19,7 @@ data: {id:"7",offset:offSet},
 success: function(data){ 
 var html = '';
 $.each(data, function(index, value){
-                     html += '<div class="list"><p><b>' + data[index].id+'.</b>'+data[index].title'</p></div>';
+                     html += '<div class="list"><p><b>' + value.id+'.</b>'+value.title'</p></div>';
                          });
                          $('#backdata').append(html); 
 $("#backdata").css({color: "green"});  
