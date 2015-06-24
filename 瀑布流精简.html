@@ -32,8 +32,8 @@ $(window).load(function(){
 	
     var data = [{"src":"images/3.jpg","title":"图片标题"},{"src":"images/4.jpg","title":"图片标题2"},{"src":"images/5.jpg","title":"图片标题3"},{"src":"images/6.jpg","title":"图片标题2"},{"src":"images/7.jpg","title":"图片标题2"},{"src":"images/8.jpg","title":"图片标题2"},{"src":"images/9.jpg","title":"图片标题2"},{"src":"images/10.jpg","title":"图片标题10"}];
 	var $ul=$("#pbl-box");
-$.each(data,function(index){			
-	var $pic = $("<li><div class='box'><img src="+data[index].src+"><h3>"+data[index].title+"</h3></div></li>");	
+$.each(data,function(index,value){			
+	var $pic = $("<li><div class='box'><img src="+value.src+"><h3>"+value.title+"</h3></div></li>");	
 	$ul.append($pic);
 });
 
