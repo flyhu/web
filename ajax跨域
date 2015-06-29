@@ -9,20 +9,23 @@
 $(function() {  
 
 $("button").click(function(){
-	var offSet=$(".list").length;
+	var offset = parseInt($('#add_more').attr('data-offset'));
 $.ajax({  
 type: "GET", 
 async: false,  
-url: "http://127.0.0.1/ajax/jsonp2.php",  
+url: "http://127.0.0.1/ajax/jsonp2.php?id=7&offset="+offSet,  
 dataType: "jsonp", 
-data: {id:"7",offset:offSet},
 success: function(data){ 
 var html = '';
-$.each(data, function(index, value){
-                     html += '<div class="list"><p><b>' + value.id+'.</b>'+value.title'</p></div>';
+$.each(data, function(Index, value){
+                               html += '<div class="list"><p><b>' + value['id']+'.</b>'+value['title']
+                                         + '</p></div>';
                          });
                          $('#backdata').append(html); 
-$("#backdata").css({color: "green"});  
+$("#backdata").css({color: "green"}); 
+var last_offset = parseInt($('#add_more').attr('data-offset'));
+$('#add_more').attr('data-offset',last_offset+15);
+ 
 } ,
 error :function(XMLHttpRequest, textStatus, errorThrown){
           //通常情况下textStatus和errorThrown只有其中一个包含信息
@@ -39,7 +42,7 @@ error :function(XMLHttpRequest, textStatus, errorThrown){
 </head>
 
 <body>
-<div align="center"><button>更多</button></div>
+<div id="add_more" align="center" data-offset="15"><button>更多</button></div>
 <div id="list">
 <div>第一</div>
 <div id="backdata"></div>
