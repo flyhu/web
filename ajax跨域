@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,8 +14,9 @@ $("button").click(function(){
 $.ajax({  
 type: "GET", 
 async: false,  
-url: "http://127.0.0.1/ajax/jsonp2.php?id=7&offset="+offSet,  
+url: "http://127.0.0.1/ajax/jsonp2.php?id=7&offset="+offset,  
 dataType: "jsonp", 
+
 success: function(data){ 
 var html = '';
 $.each(data, function(Index, value){
@@ -24,7 +26,7 @@ $.each(data, function(Index, value){
                          $('#backdata').append(html); 
 $("#backdata").css({color: "green"}); 
 var last_offset = parseInt($('#add_more').attr('data-offset'));
-$('#add_more').attr('data-offset',last_offset+15);
+$('#add_more').attr('data-offset',last_offset+3);
  
 } ,
 error :function(XMLHttpRequest, textStatus, errorThrown){
@@ -42,7 +44,7 @@ error :function(XMLHttpRequest, textStatus, errorThrown){
 </head>
 
 <body>
-<div id="add_more" align="center" data-offset="15"><button>更多</button></div>
+<div id="add_more" align="center" data-offset="0"><button>更多</button></div>
 <div id="list">
 <div>第一</div>
 <div id="backdata"></div>
