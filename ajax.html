@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>异步同步</title>
+<script src="1.8.3.jquery.min.js">
+</script>
+<script>
+$(function() { 
+
+var num=$(".current").index();//当前可见元素current索引
+$(".button2").click(function(){
+	var ListNum=$(".list").length;
+   $(".wrapIner").css("width",500*ListNum);
+   
+  if(num>0){ //当前可见元素current至少还有上一个同胞元素执行
+  num-=1;
+  $(".list:eq("+num+")").addClass("current").siblings().removeClass("current");//当前可见元素加current样式
+  $(".wrapIner").animate({left:'+=500px'});
+  }
+ 
+});
+
+$(".button1").click(function(){
+  var ListNum=$(".list").length;	
+   $(".wrapIner").css("width",500*ListNum);
+  
+  if(ListNum-num>=2){  //当前可见元素current至少还有下一个同胞元素执行
+  num+=1;
+  $(".list:eq("+num+")").addClass("current").siblings().removeClass("current");//当前可见元素加current样式
+  $(".wrapIner").animate({left:'+=-500px'});
+   
+   //异步同步
+  $.post("ajax2.php",
+  {
+    id:"7",
+    line:ListNum*3-6 //记录读取条数索引，即已读取的条数：ListNum*3，6为预设测试的。
+  },
+  function(data,status){
+	  if(data){$(".wrapIner").append("<div class='list'>"+data+"</div>");}
+  },"text");
+  
+  }
+}); }); 
+</script>
+<style type="text/css">
+.wrap {
+	height: 500px;
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	text-align: center;
+	overflow: hidden;
+	width: 500px;
+}
+.wrap .list {
+	float: left;
+	height: 500px;
+	width: 500px;
+	position: relative;
+}
+.wrap .wrapIner {
+	position: absolute;
+	background-color: #CCC;
+	height: 500px;
+	left: 0px;
+	top: 0px;
+}
+</style>
+</head>
+
+<body>
+<div align="center"><button class="button2">后退</button>  <button class="button1">前进</button></div>
+<div class="wrap">
+<div class="wrapIner">
+<div class="list current"><div>11111</div><div>111信息公司网站</div><div>11酒店网站</div></div>
+<div class="list"><div>22222</div><div>222信息公司网站</div><div>22酒店网站</div></div>
+  </div>
+</div>
+
+
+</body>
+</html>
