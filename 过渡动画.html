@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>点击过渡</title>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+</script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    $(".sidebar").toggleClass("active");
+  });
+});
+</script>
+<style type="text/css">
+.wrap{position:relative;padding:100px;}
+.out{position:absolute;top:100px;left:100px;width:120px;height:120px;border:2px rgba(51,148,228,1.00) solid; border-radius:50%;animation:rond infinite 3s; -webkit-animation:rond infinite 2s linear;}
+.dot{position:absolute;left:-5px;top:60px;width:10px;height:10px;border-radius:50%; background-color:rgba(51,148,228,1.00);}
+.inner{position:absolute;top:122px;left:122px;width:80px;height:80px; border-radius:50%; background-color:rgba(51,148,228,1.00);}
+@keyframes rond{
+	0%{transform:rotate(0deg);}
+	100%{transform:rotate(360deg);}
+}
+@-webkit-keyframes rond{
+	0%{-webkit-transform:rotate(0deg);}
+	100%{-webkit-transform:rotate(360deg);}
+}
+.sidebar {
+	width:200px;height:50px;
+	background-color:rgba(227,104,106,1.00);
+    -webkit-transition: all .5s ease-in-out 0s;
+            transition: all .5s ease-in-out 0s
+}
+.sidebar.active {
+	width:400px;
+    height:100px;
+}
+</style>
+<meta charset="utf-8">
+</head>
+<body>
+<div class="wrap">
+<div class="out"><div class="dot"></div></div>
+<div class="inner"></div>
+</div>
+<p class="sidebar"></p>
+
+<button>点击过渡切换</button>
+</body>
+</html>
