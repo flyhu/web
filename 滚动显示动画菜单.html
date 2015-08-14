@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+<style>
+.fixed {
+	width: 100%;
+	height: 30px;
+	background: red;
+	top: 0px;
+	display: block;
+	left: auto;
+	opacity: 1;
+	z-index:99;
+}
+.top {
+	width: 30px;
+	height: 30px;
+	background: red;
+	position: fixed;
+	right: 0px;
+	bottom: 50px;
+}
+body {
+	height: 10000px;
+	margin: 0px;
+	padding: 0px;
+}
+.step{height:500px; display:block;}
+.inner_wrap{position:relative;}
+.layout_1{position:absolute;width:50%;height:100px; background-color:#E3686A;}
+.layout_2{position:absolute;width:50%;height:100px; background-color:#428AED;}
+</style>
+<script>
+
+$(document).ready(function(e) {	
+	t = $(".fixed").offset().top;
+	$(window).scroll(function(e){
+		
+		s = $(document).scrollTop();	
+		if(s > t - 10){
+			$(".fixed").css({"position":"fixed","opacity":"0.6"});			
+		}else{
+			$(".fixed").css({"position":"","opacity":"1"});
+		}
+	})
+	$(".top").click(function(){
+		$(document).scrollTop(0);
+		})
+		
+		//滚动动画
+		$(".step").each(function(index) {
+		var $self = $(this),
+			$left = $self.find(".layout_1"),
+			$right = $self.find(".layout_2"),
+			offset = $self.offset(),  
+           	topOffset = offset.top; 
+        // reset
+        $left.css({left: "-50%",opacity: "0"});
+        $right.css({left: "150%",opacity: "0"});
+		$(window).scroll(function(event) {			
+			//if (($(window).scrollTop() + $(window).height()) > (topOffset) && ((topOffset + $self.height()) > $(window).scrollTop())){
+			if (($(window).scrollTop() + $(window).height()/2) > (topOffset) ){
+					if ( index%2 === 1) {
+					$left.animate({left: "0",opacity:"1"}, 1200);
+					$right.animate({left: "50%",opacity:"1"}, 1200);
+				}else{
+					$left.animate({left: "0",opacity:"1"}, 1200);
+					$right.animate({left: "50%",opacity:"1"}, 1200);
+				}		
+			}
+		});
+		});
+});
+</script>
+</head>
+
+<body>
+<div>
+  <p>此处显示新 Div 标签的内容</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+</div>
+<div class="fixed"></div><div class="top"></div>
+<div>
+  <p>此处显示新 Div 标签的内容</p>
+  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>内容</p>
+</div>
+<div class="step step1"><div class="inner_wrap">					
+			<div class="layout_1"></div>
+			<div class="layout_2"></div>
+		</div></div></div>
+<div>
+  <p>此处显示新 Div 标签的内容</p>
+  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>  <p>此处显示新 Div 标签的内容</p>   <p>此处显示新 Div 标签的内容</p>内容</p>
+</div>
+<div class="step step2"><div class="inner_wrap">					
+			<div class="layout_1"></div>
+			<div class="layout_2"></div>
+		</div></div></div>
+
+</body>
+</html>
