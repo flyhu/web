@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style type="text/css">
+
+li {
+	float: left;
+	width: 300px;
+	list-style: none;
+	background-color: rgba(228,76,79,1.00);
+}
+</style>
+<script src="http://www.w3school.com.cn/jquery/jquery.js"></script>
+<script>
+jQuery.extend({
+       minIndex:function (minIndex) {  
+var minheight=$("ul").find("li").eq(2).outerHeight();
+for(var i=0; i<4; i++){
+	if($("ul").find("li").eq(i).outerHeight()<=minheight)
+	{
+		minheight=$("li").eq(i).outerHeight();
+		minIndex=i;
+	}}
+	return minIndex;
+       }
+ });
+$(document).ready(function(){
+
+var minIndex=0;
+var aa=$.minIndex("minIndex");
+alert(aa);
+});
+</script>
+</head>
+
+<body>
+<ul>
+<li>gfd<br>
+g</li>
+
+<li>fd<br>
+<br>
+<br><br>
+<br>
+d</li>
+<li>fa</li>
+<li>fd<br>
+<br>
+
+d</li>
+</ul>
+
+</body>
+</html>
