@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>长龙统计</title>
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="data.json"></script>
+<script>
+function getCount(m,lsod)
+{
+	$(".lot-table tr:gt(0)").remove();
+	$(".dcls_title2 td:gt(6)").remove();
+	$lsod=lsod;
+	$M=m;
+	var n = 0;
+	$.each(data, function(i, content)
+			  { 
+			  	n+=1;
+			  	$cl=content[$M][$lsod];
+	
+				$tr=$('<tr id='+i+'></tr>');
+        		$tr.appendTo($(".lot-table tbody"));
+				$len=$(".dcls_title2 td").length;
+				
+        		for(var j=0;j<$len;j++)
+        		{	 
+						$count_html=$('<td></td>');	
+           				$count_html.appendTo($tr);
+        		}
+				$("#"+i+" td:eq(0)").text(i);
+				
+				for (x in $cl){
+					$count=parseInt(x.replace(/\D/gi,''));
+					if($count>$len-1){
+						$n_len=$count-$len+1;
+						for(var j=0;j<$n_len;j++)
+        				{	 
+						$n_html=$('<td></td>');	
+           				$(".lot-table tr:eq("+n+")").append($n_html);
+						$(".dcls_title2").append("<td>"+$len+"期</td>");
+						$len+=1;
+        				}
+					}
+					var count=$cl[x];
+					($cl[x]==0)?count="":count;
+					$("#"+i+" td:eq("+$count+")").text(count);
+				}
+												   												   
+    }); 
+	
+	$(".lot-table tr").each(function() {
+		$len=$(".dcls_title2 td").length;
+		$n_len=$(this).children("td").length;
+		if($n_len<$len){
+			for(var j=0;j<$len-$n_len;j++)
+					{	 
+							$count_html=$('<td></td>');	
+							$count_html.appendTo($(this));
+					}
+		}
+     });
+	 
+	$(".lot-table tr:odd").	css("background-color","#f2f2f2");
+}
+$(document).ready(function(){
+	getCount("m1", "large");
+	$("[data-type]").click(function(){
+		var $this=$(this);
+		$this.addClass("cur").siblings().removeClass("cur");
+		$("#choose_pos li a").removeClass("cur");	
+		$(".lot-table tr:gt(0)").remove();
+		$(".dcls_title2 td:gt(6)").remove();
+	    });
+	
+	$("[data-pos]").click(function(){
+		var $this=$(this);
+		$("#choose_pos li a").removeClass("cur");
+		$this.addClass("cur");
+		m=$this.attr("data-pos");
+		lsod=$("#choose_type .cur").attr("data-type");
+		getCount(m,lsod)
+	});
+  		
+});
+</script>
+<style>
+a:hover {
+	color: #ed1c24
+}
+div {
+	display: block;
+}
+.clear {
+	clear: both;
+	height: 1px;
+	visibility: hidden;
+	overflow: hidden
+}
+.clearfix:after {
+	content: "Thilina Fong";
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden
+}
+body {
+	text-align: center;
+	font-size: 12px;
+	background-color: #fff;
+	color: #1d1d1d
+}
+a {
+	text-decoration: none;
+	color: #333
+}
+a:hover {
+	color: #ed1c24
+}
+li {
+	list-style: none;
+}
+ul, li {
+	padding: 0;
+margin::0;
+}
+.lot-number-omit {
+	line-height: 32px;
+}
+.lot-number-omit .ball ul li {
+	float: left;
+	width: 78px;
+	text-align: center;
+	display: block;
+}
+.lot-number-omit .ball ul li a {
+	margin: 0 15px;
+	color: #333;
+}
+.dailyChangLongStatistics {
+}
+.dailyChangLongStatistics .dcls_tool1 {
+	background-color: #f2f2f2;
+	border: 1px solid #d7d4d4;
+	border-left: 0px;
+}
+.dcls_tool1 a {
+	display: block;
+	width: 80px;
+	height: 33px;
+	text-align: center;
+	line-height: 33px;
+	border-left: 1px solid #d7d4d4;
+	background-color: #f2f2f2;
+	float: left;
+	font-size: 12px;
+	color: #000;
+	cursor: pointer;
+}
+.dcls_tool1 a:hover, .dcls_tool1 a.hover, .dcls_tool1 a:hover, .dcls_tool1 a.cur {
+	background-color: #df0a29;
+	color: #FFF;
+}
+.dailyChangLongStatistics .dcls_explanation {
+	font-size: 12px;
+	color: #999;
+	line-height: 28px;
+	text-align: left;
+}
+.dailyChangLongStatistics .lot-number-omit .ball {
+	border: 0px;
+	padding-bottom: 5px;
+	background: none;
+}
+.dailyChangLongStatistics .lot-number-omit .ball .cur {
+	color: red;
+}
+.dailyChangLongStatistics .lot-table {
+	background-color: #fdfdfd;
+}
+.dailyChangLongStatistics .lot-table td {
+	height: 23px;
+}
+.dailyChangLongStatistics .lot-table .dcls_firstTd {
+	width: 84px;
+	height: 46px;
+	background: url("../images/stat/dcls_table_bg.gif") no-repeat top left;
+}
+.dailyChangLongStatistics .lot-table .dcls_firstTd span {
+	display: block;
+	font-size: 12px;
+	font-weight: bold;
+	color: #999;
+	text-align: left;
+	line-height: 22px;
+	padding: 0px 5px;
+}
+.dailyChangLongStatistics .lot-table .dcls_firstTd span.span1 {
+	text-align: right;
+}
+.dailyChangLongStatistics .lot-table .dcls_title1 {
+	font-size: 12px;
+	color: #000;
+	position: relative;
+}
+.dailyChangLongStatistics .lot-table .dcls_tabA {
+	position: absolute;
+	right: 20px;
+	top: 5px;
+	text-decoration: underline;
+	color: #df0a29;
+	cursor: pointer;
+}
+.dailyChangLongStatistics .lot-table .dcls_title2 {
+	font-size: 12px;
+	color: #333;
+	font-weight: bold;
+	background-color: #D8D5D5;
+}
+.dailyChangLongStatistics .lot-table {
+	background-color: #fdfdfd;
+}
+.lot-table {
+	width: 100%;
+	text-align: center;
+}
+table {
+	border-collapse: collapse;
+}
+.lot-table {
+	width: 100%;
+	text-align: center;
+}
+.lot-table .head {
+	height: 40px;
+	background-color: #f2f2f2;
+}
+.lot-table td {
+	border: solid 1px #ccc;
+	height: 37px;
+}
+.lot-table .odd {
+	background-color: #fff;
+	font-size: 13px;
+}
+.lot-table .even {
+	background-color: #f9f9f9;
+	font-size: 13px;
+}
+.lot-table .lose {
+	color: #21961c;
+}
+.lot-table .win {
+	color: #e84147;
+}
+.lot-table .align {
+	text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div id="lot-wrap" style="margin-bottom: 20px;"> <a name="clsplit" id="clsplit"></a>
+  <input type="hidden" id="callFun" value="changeSelect" container="changlongdiv" time="10000">
+  <div class="dailyChangLongStatistics">
+    <div class="dcls_tool1" id="choose_type"> <a style="width: 87px;" data-type="large" class="cur" data-text="大">大长龙</a> <a data-type="small" data-text="小">小长龙</a> <a data-type="even" data-text="单">单长龙</a> <a data-type="odd" data-text="双">双长龙</a>
+      <div style="clear: both"></div>
+    </div>
+    <div class="dcls_explanation"> 该页面统计长龙每天出现的条数，例如某日连续开出5期长龙（该形态）共出现10次 </div>
+    <ul class="lot-number-omit">
+      <li class="ball" id="choose_pos">
+        <ul>
+          <li><a href="javascript:void(0);" data-pos="m1" class="cur">冠军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="m2">亚军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="m3">第三名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="m4">第四名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="m5">第五名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="m6">第六名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="m7">第七名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="m8">第八名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="m9">第九名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="m10">第十名</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div id="changlongdiv">
+ 
+      <table class="lot-table">
+        <tbody>
+          
+          <tr class="dcls_title2">
+          <td width="80">日期</td>
+          <td>1期</td>
+            <td>2期</td>
+            <td>3期</td>
+            <td>4期</td>
+            <td>5期</td>
+            <td>6期</td>     
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
