@@ -6,10 +6,11 @@
 <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="data.json"></script>
 <script>
+//数据处理函数
 function getCount(m,lsod)
 {
 	$(".lot-table tr:gt(0)").remove();
-	$(".dcls_title2 td:gt(6)").remove();
+	$(".lot-table .dcls_title2 td:gt(6)").remove();
 	$lsod=lsod;
 	$M=m;
 	var n = 0;
@@ -20,7 +21,7 @@ function getCount(m,lsod)
 	
 				$tr=$('<tr id='+i+'></tr>');
         		$tr.appendTo($(".lot-table tbody"));
-				$len=$(".dcls_title2 td").length;
+				$len=$(".lot-table .dcls_title2 td").length;
 				
         		for(var j=0;j<$len;j++)
         		{	 
@@ -37,7 +38,7 @@ function getCount(m,lsod)
         				{	 
 						$n_html=$('<td></td>');	
            				$(".lot-table tr:eq("+n+")").append($n_html);
-						$(".dcls_title2").append("<td>"+$len+"期</td>");
+						$(".lot-table .dcls_title2").append("<td>"+$len+"期</td>");
 						$len+=1;
         				}
 					}
@@ -49,7 +50,7 @@ function getCount(m,lsod)
     }); 
 	
 	$(".lot-table tr").each(function() {
-		$len=$(".dcls_title2 td").length;
+		$len=$(".lot-table .dcls_title2 td").length;
 		$n_len=$(this).children("td").length;
 		if($n_len<$len){
 			for(var j=0;j<$len-$n_len;j++)
@@ -62,16 +63,18 @@ function getCount(m,lsod)
 	 
 	$(".lot-table tr:odd").	css("background-color","#f2f2f2");
 }
+//
 $(document).ready(function(){
+
 	getCount("m1", "large");
 	$("[data-type]").click(function(){
 		var $this=$(this);
 		$this.addClass("cur").siblings().removeClass("cur");
 		$("#choose_pos li a").removeClass("cur");	
 		$(".lot-table tr:gt(0)").remove();
-		$(".dcls_title2 td:gt(6)").remove();
+		$(".lot-table .dcls_title2 td:gt(6)").remove();
 	    });
-	
+	//
 	$("[data-pos]").click(function(){
 		var $this=$(this);
 		$("#choose_pos li a").removeClass("cur");
@@ -80,10 +83,30 @@ $(document).ready(function(){
 		lsod=$("#choose_type .cur").attr("data-type");
 		getCount(m,lsod)
 	});
-  		
+//固定th
+	$(".fixed tbody").append($(".dcls_title2").clone());
+	
+	$(window).scroll(function(e){
+	s = $(document).scrollTop();
+	s_width = $("#changlongdiv").width();
+	if(s > 150)
+	{
+		$(".fixed").css({"position":"fixed","width":s_width,"opacity":"1","display":"block"});			
+	}
+	else
+	{
+		$(".fixed").css({"position":"","opacity":"0","display":"none"});
+	}
+	})
+		
 });
 </script>
 <style>
+.fixed {
+	top: 0px;
+	opacity: 0;
+	display:none;
+}
 a:hover {
 	color: #ed1c24
 }
@@ -107,7 +130,8 @@ body {
 	text-align: center;
 	font-size: 12px;
 	background-color: #fff;
-	color: #1d1d1d
+	color: #1d1d1d;
+	padding:5px;
 }
 a {
 	text-decoration: none;
@@ -174,92 +198,41 @@ margin::0;
 .dailyChangLongStatistics .lot-number-omit .ball .cur {
 	color: red;
 }
-.dailyChangLongStatistics .lot-table {
+.lot-table， .top-table {
 	background-color: #fdfdfd;
 }
-.dailyChangLongStatistics .lot-table td {
+.lot-table td, .top-table td {
 	height: 23px;
 }
-.dailyChangLongStatistics .lot-table .dcls_firstTd {
-	width: 84px;
-	height: 46px;
-	background: url("../images/stat/dcls_table_bg.gif") no-repeat top left;
-}
-.dailyChangLongStatistics .lot-table .dcls_firstTd span {
-	display: block;
-	font-size: 12px;
-	font-weight: bold;
-	color: #999;
-	text-align: left;
-	line-height: 22px;
-	padding: 0px 5px;
-}
-.dailyChangLongStatistics .lot-table .dcls_firstTd span.span1 {
-	text-align: right;
-}
-.dailyChangLongStatistics .lot-table .dcls_title1 {
-	font-size: 12px;
-	color: #000;
-	position: relative;
-}
-.dailyChangLongStatistics .lot-table .dcls_tabA {
-	position: absolute;
-	right: 20px;
-	top: 5px;
-	text-decoration: underline;
-	color: #df0a29;
-	cursor: pointer;
-}
-.dailyChangLongStatistics .lot-table .dcls_title2 {
+
+.dcls_title2 {
 	font-size: 12px;
 	color: #333;
 	font-weight: bold;
 	background-color: #D8D5D5;
 }
-.dailyChangLongStatistics .lot-table {
+.lot-table, .top-table {
 	background-color: #fdfdfd;
 }
-.lot-table {
-	width: 100%;
-	text-align: center;
-}
+
 table {
 	border-collapse: collapse;
 }
-.lot-table {
+.lot-table, .top-table{
 	width: 100%;
 	text-align: center;
 }
-.lot-table .head {
-	height: 40px;
-	background-color: #f2f2f2;
-}
-.lot-table td {
+
+.lot-table td , .top-table td{
 	border: solid 1px #ccc;
 	height: 37px;
 }
-.lot-table .odd {
-	background-color: #fff;
-	font-size: 13px;
-}
-.lot-table .even {
-	background-color: #f9f9f9;
-	font-size: 13px;
-}
-.lot-table .lose {
-	color: #21961c;
-}
-.lot-table .win {
-	color: #e84147;
-}
-.lot-table .align {
-	text-align: center;
-}
+
 </style>
 </head>
 
 <body>
-
+<div class="fixed"><table class="top-table"><tbody></tbody></table></div>
 <div id="lot-wrap" style="margin-bottom: 20px;"> <a name="clsplit" id="clsplit"></a>
   <input type="hidden" id="callFun" value="changeSelect" container="changlongdiv" time="10000">
   <div class="dailyChangLongStatistics">
