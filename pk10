@@ -73,31 +73,40 @@ $(document).ready(function(){
 		$("#choose_pos li a").removeClass("cur");	
 		$(".lot-table tr:gt(0)").remove();
 		$(".lot-table .dcls_title2 td:gt(6)").remove();
-	    });
-	//
+	 });
+	 
+	//固定th
+	$(".fixed tbody").append($(".dcls_title2").clone());
+	
 	$("[data-pos]").click(function(){
 		var $this=$(this);
 		$("#choose_pos li a").removeClass("cur");
 		$this.addClass("cur");
 		m=$this.attr("data-pos");
 		lsod=$("#choose_type .cur").attr("data-type");
-		getCount(m,lsod)
+		getCount(m,lsod);
+		
+		//固定th
+		$(".fixed .dcls_title2").remove();
+		$(".fixed tbody").append($(".dcls_title2").clone());
+
 	});
-//固定th
-	$(".fixed tbody").append($(".dcls_title2").clone());
 	
-	$(window).scroll(function(e){
+//固定th
+$(window).scroll(function(e){
 	s = $(document).scrollTop();
+	
 	s_width = $("#changlongdiv").width();
 	if(s > 150)
-	{
+	{   
+	    
 		$(".fixed").css({"position":"fixed","width":s_width,"opacity":"1","display":"block"});			
 	}
 	else
 	{
 		$(".fixed").css({"position":"","opacity":"0","display":"none"});
 	}
-	})
+});
 		
 });
 </script>
