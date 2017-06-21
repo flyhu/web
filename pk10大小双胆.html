@@ -50,42 +50,59 @@ function dxsd_array(argument){
 	return dxsd_list 
  }
 
-var sd=dxsd_array('sd') 
-console.log(sd)  
 
 // var stirng=dx[8]['2017-6-19'].ball1.join()
- var string="d,x,x,x,x,x,x,d,d,x,d,d,d,x,d,x,d,d,d,d,x,d,d,x,x,x,d,d,d,x,d,x,d,d,d,x,x,d,d,d,x,d,x,x,x,d,d,x,x,x,d,d,x,x,x,x,x,x,d,d,d,x,x,d,d,x,x,x,x,x,d,x,d,d,d,x,d,d,x,d,d,d,x,x,x,x,d,x,d,d,d,d,d,x,x,d,d,x,x,x,d,d,d,d,d,x,x,d,d,d,x,x,d,d,d,x,d,x,d,d,x,x,x,x,d,d,x,d,d,d,x,d,x,d,x,x,x,d,x,d,x,d,x,d,d,d,x,x,d,d,x,x,x,d,x,d,x,d,d,x,d,d,d,d,d,d,x,x,d,d,x,x,d,d,d,x,x,d,d"
+ var string="d,x,d,x,x,x,x,d,d,x,d,d,d,x,d,x,d,d,d,d,x,d,d,x,x,x,d,d,d,x,d,x,d,d,d,x,x,d,d,d,x,d,x,x,x,d,d,x,x,x,d,d,x,x,x,x,x,x,d,d,d,x,x,d,d,x,x,x,x,x,d,x,d,d,d,x,d,d,x,d,d,d,x,x,x,x,d,x,d,d,d,d,d,x,x,d,d,x,x,x,d,d,d,d,d,x,x,d,d,d,x,x,d,d,d,x,d,x,d,d,x,x,x,x,d,d,x,d,d,d,x,d,x,d,x,x,x,d,x,d,x,d,x,d,d,d,x,x,d,d,x,x,x,d,x,d,x,d,d,x,d,d,d,d,d,d,x,x,d,d,x,x,d,d,d,x,x,d,dxdxxxd"
 
  ntring=string.replace(/,/g, "")
- console.log(ntring)
+// console.log(ntring)
 
 var list=[]
-function fliter(augument,startindex,endindex,position){
-	var strings=ntring
+function fliter(balls,augument,startindex,endindex,position){
+	var strings=balls
 	var start=startindex,end=endindex,pos=position,reg=augument //开始、结束索引，位置记录，规则
 
 	if(strings.indexOf(reg, pos)>-1){   
 		if(pos==0&&strings.indexOf(reg.slice(1,3))==0) {   //首次检索修规则
 			start=0;	
 		} else{start=strings.indexOf(reg, pos) }      //头部定位截取索引            
-	    pos+=2;                                     //开始尾部定位
-	    reg=augument
+	    pos+=1;                                     //索引下移，开始尾部截取定位
 		var array=[]	
-		if(strings.indexOf(reg, pos)<0){return;}else{  
+
+		if(strings.indexOf(reg, pos)<0){
+			if(reg.slice(0,2)==strings.slice(-2)){            //尾部检索修规则
+       		var result=strings.slice(start) 
+		    array.push(result)
+		    list.push(array)
+		    return
+	   	    }
+		}
+		else{  
 			end=strings.indexOf(reg, pos)  //尾部定位截取索引			
 		    var result=strings.slice(start,end+3) //截取存组
 		    array.push(result)
 		    list.push(array)
 		   // pos=strings.indexOf(reg, pos)   
-		    fliter(reg,start,end,end)   //再调用
+		    fliter(strings,reg,start,end,end)   //再调用
 
 		}
 	}
 
+
 	return list
 }
+var dx=dxsd_array('dx') 
+var sd=dxsd_array('sd') 
+  
+var balls=dx[8]['2017-6-19'].ball1.join().replace(/,/g, "")
+console.log(balls)
+var results=fliter(balls,"小大小",0,0,0)//大之间
+console.log(results)
 
- var results=fliter("xdx",0,0,0)
- console.log(results)
+var balls2=sd[8]['2017-6-19'].ball1.join().replace(/,/g, "")
+console.log(balls2)
+var results2=fliter(balls2,"双单双",0,0,0)//大之间
+console.log(results2)
+
 </script>
 </html>
