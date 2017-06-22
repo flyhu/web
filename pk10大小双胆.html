@@ -4,99 +4,149 @@
 <meta charset="UTF-8">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>pk10</title>
-<script src="pk10.json"></script>
+<script src="js/pk10.json"></script>
 <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
-</head>
-<body>
-<div id="app"> 
-
-</div>
-
+<script src="js/paser.js"></script>
+<link rel="stylesheet" href="js/style.css">
 <script>
-//判断双胆
-function ifdxsd(argument,ball){   
-	var ball=parseInt(ball)
-	var result=''
-	switch (argument) {
-		case 'dx':
-			ball>5?result="大":result="小"
-			break;
-		case 'sd':
-			ball%2==0?result="双":result="单"
-			break;
-	}
-	return result
-}
 
-//构造大小双胆新对象
-function dxsd_array(argument){
+//数据处理函数
+function getCount(reg,ball,dxsd,date){
+	$dxsd=dxsd
+	$reg=reg
+	$ball=ball
+	var balls="",list_array="",result=""
+	list_array=dxsd_array($dxsd)  
+	 if(date==undefined){                       //日期
+		 $.each(list_array, function(key,item){
+		 	$dates_html=$('<option value='+key+'>'+key+'</option>')  
+	        $(".date").prepend($dates_html)     
+		 }) 
+	     $(".date option:eq(0)").attr("selected","")
+	     date=$(".date option:eq(0)").attr("value")
+	 }
+console.log(list_array)
+	 balls=list_array[date][$ball].join().replace(/,/g, "") //获取球
+     result=fliter(balls,$reg,0,0,0)
+     types_ball=reg.slice(0,1)
+
+     $.each(result, function(index,list){
+     	$box=""
+     	$total=""
+     	list_total=list.toString().split("")
+     	$.each(list_total, function(i,l){
+     		if(l==types_ball){
+     			$total++
+     		}
+ 			switch (l) {
+				case '大':
+					ballclass="red";
+					break;
+				case '小':
+					ballclass="green"
+					break;
+				case '单':
+					ballclass="blue"
+					break;
+				case '双':
+					ballclass="sky"
+					break;
+			}
+     		$box+=('<span class='+ballclass+'>'+l+'</span>')
+     	})
+     	$tr=$('<tr><td>'+types_ball+'出现 <b>'+$total+'/'+list_total.length+'</b></td><td class="balls">'+$box+'</td></tr>')
+        $tr.appendTo($(".lot-table tbody"))
+   
+     })
+												   												   
+} 
+
+$(document).ready(function(){
+
+ getCount("小大小","ball1","dx")  //大之间
+
+	$("[data-type]").click(function(){
+		var $this=$(this);
+		$this.addClass("cur").siblings().removeClass("cur");
+		$("#choose_pos li a").removeClass("cur");	
+		$("#choose_pos li:eq(0) a").addClass("cur");
+		$(".lot-table tr:gt(0)").remove();
+		$(".date option").remove()
+		reg=$("#choose_type .cur").attr("data-text");
+		lsod=$("#choose_type .cur").attr("data-type");
+		getCount(reg,"ball1",lsod) 
+	 })
 	
-	var dxsd_list=[]
-	$.each(data, function(key, list){	
-	  var array={}
-	  var balls={'ball1':[],'ball2':[],'ball3':[],'ball4':[],'ball5':[],'ball6':[],'ball7':[],'ball8':[],'ball9':[],'ball10':[]} //1-10名
-	  array[key]=balls
-	  dxsd_list.push(array)
+	$("[data-pos]").click(function(){
+		var $this=$(this);
+		$(".date option").remove()
+		$(".lot-table tr:gt(0)").remove();
+		$("#choose_pos li a").removeClass("cur");
+		$this.addClass("cur");
+		m=$this.attr("data-pos");
+		lsod=$("#choose_type .cur").attr("data-type");
+		reg=$("#choose_type .cur").attr("data-text");	
+		getCount(reg,m,lsod)
+	}) 
 
-	  $.each(list, function(index,item){
-		$.each(item.result, function(i,result){
-			var num='ball'+i.substr(1) //取名次
-			var dxsd_ball = ifdxsd(argument,result) 
-			array[key][num].push(dxsd_ball)
-		})
+	$(".date").change(function(e){    //日期选择
+    	$(this).css("background-color","#FFFFCC");
+    	$(".lot-table tr:gt(0)").remove();
+    	m=$("#choose_pos .cur").attr("data-pos");
+		lsod=$("#choose_type .cur").attr("data-type");
+		reg=$("#choose_type .cur").attr("data-text");
 
-	  })
-	})
-	return dxsd_list 
- }
+		date=e.target.value
+		getCount(reg,m,lsod,date)
 
-
-var list=[]
-function fliter(balls,augument,startindex,endindex,position){
-	var strings=balls
-	var start=startindex,end=endindex,pos=position,reg=augument //开始、结束索引，位置记录，规则
-
-	if(strings.indexOf(reg, pos)>-1){   
-		if(pos==0&&strings.indexOf(reg.slice(1,3))==0) {   //首次检索修规则
-			start=0;	
-		} else{start=strings.indexOf(reg, pos) }      //头部定位截取索引            
-	    pos+=1;                                     //索引下移，开始尾部截取定位
-		var array=[]	
-
-		if(strings.indexOf(reg, pos)<0){
-			if(reg.slice(0,2)==strings.slice(-2)){            //尾部检索修规则
-       		var result=strings.slice(start) 
-		    array.push(result)
-		    list.push(array)
-		    return
-	   	    }
-		}
-		else{  
-			end=strings.indexOf(reg, pos)  //尾部定位截取索引			
-		    var result=strings.slice(start,end+3) //截取存组
-		    array.push(result)
-		    list.push(array)
-		   // pos=strings.indexOf(reg, pos)   
-		    fliter(strings,reg,start,end,end)   //再调用
-
-		}
-	}
-
-
-	return list
-}
-var dx=dxsd_array('dx') 
-var sd=dxsd_array('sd') 
-  
-var balls=dx[8]['2017-6-19'].ball1.join().replace(/,/g, "")
-console.log(balls)
-var results=fliter(balls,"小大小",0,0,0)//大之间
-console.log(results)
-
-var balls2=sd[8]['2017-6-19'].ball1.join().replace(/,/g, "")
-console.log(balls2)
-var results2=fliter(balls2,"双单双",0,0,0)//大之间
-console.log(results2)
-
+  });
+		
+});
 </script>
+</head>
+
+<body>
+
+<div id="lot-wrap" style="margin-bottom: 20px;"> 
+  <div class="dailyChangLongStatistics">
+    <div class="dcls_tool1" id="choose_type"> <a style="width: 87px;" data-type="dx" class="cur" data-text="小大小">大之间</a> <a data-type="dx" data-text="大小大">小之间</a> <a data-type="sd" data-text="双单双">单之间</a> <a data-type="sd" data-text="单双单">双之间</a>
+      <div style="clear: both"></div>
+    </div>
+    <div class="dcls_explanation"> 第一条为首，最后一条为尾</div>
+    <ul class="lot-number-omit">
+      <li class="ball" id="choose_pos">
+        <ul>
+          <li><a href="javascript:void(0);" data-pos="ball1" class="cur">冠军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball2">亚军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball3">第三名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball4">第四名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball5">第五名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball6">第六名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball7">第七名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball8">第八名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball9">第九名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball10">第十名</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div id="changlongdiv">
+ 
+      <table class="lot-table">
+        <tbody>
+          
+          <tr class="dcls_title2">
+	          <td width="120">日期
+	          <select class="date">
+				
+			  </select>
+	          </td>
+	          <td>
+	          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
 </html>
