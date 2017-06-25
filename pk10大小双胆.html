@@ -17,20 +17,23 @@ function getCount(reg,ball,dxsd,date){
 	$ball=ball
 	var balls="",list_array="",result=""
 	list_array=dxsd_array($dxsd)  
-	 if(date==undefined){                       //日期
-		 $.each(list_array, function(key,item){
+	 if(date==undefined){                       
+		 $.each(list_array, function(key,item){   //日期
 		 	$dates_html=$('<option value='+key+'>'+key+'</option>')  
 	        $(".date").prepend($dates_html)     
 		 }) 
 	     $(".date option:eq(0)").attr("selected","")
 	     date=$(".date option:eq(0)").attr("value")
 	 }
-console.log(list_array)
-	 balls=list_array[date][$ball].join().replace(/,/g, "") //获取球
+
+	 ball_t=list_array[date][$ball].join().replace(/,/g, "") //获取球
+     balls=ball_t.split("").reverse().join("")
+	 console.log(date+'开奖：'+balls)
      result=fliter(balls,$reg,0,0,0)
      types_ball=reg.slice(0,1)
 
      $.each(result, function(index,list){
+
      	$box=""
      	$total=""
      	list_total=list.toString().split("")
@@ -54,11 +57,16 @@ console.log(list_array)
 			}
      		$box+=('<span class='+ballclass+'>'+l+'</span>')
      	})
-     	$tr=$('<tr><td>'+types_ball+'出现 <b>'+$total+'/'+list_total.length+'</b></td><td class="balls">'+$box+'</td></tr>')
+     	//修正首尾号统计
+     	if(balls.slice(0,1)==reg.slice(1,2)||balls.slice(-2)==reg.slice(0,2)){
+     		$total+=1
+     		list_total.length+=1
+     	}
+     	$tr=$('<tr class="ball_list"><td>'+types_ball+'出现: <b>'+($total-2)+'/'+(list_total.length-4)+'</b></td><td class="balls">'+$box+'</td></tr>')
         $tr.appendTo($(".lot-table tbody"))
-   
      })
-												   												   
+$(".balls span:lt(2)").addClass("after")
+										   												   
 } 
 
 $(document).ready(function(){
@@ -100,7 +108,11 @@ $(document).ready(function(){
 		getCount(reg,m,lsod,date)
 
   });
-		
+
+	$(".ball_list:first").children("td:first").append("<b></b>");
+	
+   
+   
 });
 </script>
 </head>
@@ -112,7 +124,7 @@ $(document).ready(function(){
     <div class="dcls_tool1" id="choose_type"> <a style="width: 87px;" data-type="dx" class="cur" data-text="小大小">大之间</a> <a data-type="dx" data-text="大小大">小之间</a> <a data-type="sd" data-text="双单双">单之间</a> <a data-type="sd" data-text="单双单">双之间</a>
       <div style="clear: both"></div>
     </div>
-    <div class="dcls_explanation"> 第一条为首，最后一条为尾</div>
+    <div class="dcls_explanation"> 统计数据为间隔内，不包括两端，第一行和最后一行有点偏差</div>
     <ul class="lot-number-omit">
       <li class="ball" id="choose_pos">
         <ul>
@@ -141,6 +153,7 @@ $(document).ready(function(){
 			  </select>
 	          </td>
 	          <td>
+	          只统计间隔之间球的出现次数，即除去首尾两个球
 	          </td>
           </tr>
         </tbody>
