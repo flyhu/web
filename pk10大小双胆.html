@@ -61,12 +61,20 @@ function getCount(reg,ball,dxsd,date){
      	$tr=$('<tr class="ball_list"><td>'+types_ball+'出现: <b><span>'+($total-2)+'/</span><span>'+(list_total.length-4)+'</span></b></td><td class="balls">'+$box+'</td></tr>')
         $tr.appendTo($(".lot-table tbody"))
      })
-    //修正首号统计
+  
+  //虚化处理
+    $(".balls").find("span:first").css("opacity","0.12")
+	$(".balls").find("span:first").next().css("opacity","0.12")
+	$(".balls").find("span:last").css("opacity","0.12")	
+	$(".balls").find("span:last").prev().css("opacity","0.12")
+
+	  //修正首号统计
  	if(balls.slice(0,1)==reg.slice(1,2)){
  		var f_total=parseInt($(".ball_list:first").children("td:first").find("b span:eq(0)").text())+1
  		var f_length=parseInt($(".ball_list:first").children("td:first").find("b span:eq(1)").text())+1
  
 		$(".ball_list:first").children("td:first").find("b").text(f_total+'/'+f_length)
+		$(".ball_list:first").children("td.balls").find("span:first").next().css("opacity","1")
 	}	
 	    //修正尾号统计
  	if(balls.slice(-2)==reg.slice(0,2)){
@@ -74,6 +82,7 @@ function getCount(reg,ball,dxsd,date){
  		var l_length=parseInt($(".ball_list:last").children("td:first").find("b span:eq(1)").text())+1
 
 		$(".ball_list:last").children("td:first").find("b").text(l_total+'/'+l_length)
+		$(".ball_list:last").children("td.balls").find("span:last").prev().css("opacity","1")
 	}							   												   
 } 
 
