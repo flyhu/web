@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<title>pk10</title>
+<script src="js/pk10.json"></script>
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/paser.js"></script>
+<link rel="stylesheet" href="js/style.css">
+<script>
+
+//数据处理函数
+function getCount(types,ball,dxsd,date){
+	$dxsd=dxsd
+	$reg=reg
+	$ball=ball
+	var balls="",list_array="",result=""
+	list_array=dxsd_array($dxsd)  
+	 if(date==undefined){                       
+		 $.each(list_array, function(key,item){   //日期
+		 	$dates_html=$('<option value='+key+'>'+key+'</option>')  
+	        $(".date").prepend($dates_html)     
+		 }) 
+	     $(".date option:eq(0)").attr("selected","")
+	     date=$(".date option:eq(0)").attr("value")
+	 }
+
+	 ball_t=list_array[date][$ball].join().replace(/,/g, "") //获取球
+     balls=ball_t.split("").reverse().join("")
+
+	 console.log(date+'开奖：'+balls)
+     // result=fliter(balls,$reg,0,0,0)
+     types_ball=types.slice(0,1)
+     rever_ball=types.slice(1,2)
+     var reg =new RegExp(types_ball+types_ball+"(.*?)"+rever_ball+rever_ball,"g")
+     var result  = balls.match(reg)
+     console.log(result)
+
+     
+
+
+     $.each(result, function(index,list){
+
+     	$box=""
+     	$total=""
+     	list_total=list.toString().split("")
+     	$.each(list_total, function(i,l){
+     		if(l==types_ball){
+     			$total++
+     		}
+ 			switch (l) {
+				case '大':
+					ballclass="red";
+					break;
+				case '小':
+					ballclass="green"
+					break;
+				case '单':
+					ballclass="blue"
+					break;
+				case '双':
+					ballclass="sky"
+					break;
+			}
+     		$box+=('<span class='+ballclass+'>'+l+'</span>')
+     	})
+
+     	$tr=$('<tr class="ball_list"><td>'+types_ball+'输赢: <b><span>'+($total*2-list_total.length-2)+'</span></b></td><td class="balls">'+$box+'</td></tr>')
+        $tr.appendTo($(".lot-table tbody"))
+     })
+  							   												   
+} 
+
+$(document).ready(function(){
+
+ getCount("大小","ball1","dx")  //大之间
+
+	$("[data-type]").click(function(){
+		var $this=$(this);
+		$this.addClass("cur").siblings().removeClass("cur");
+		$("#choose_pos li a").removeClass("cur");	
+		$("#choose_pos li:eq(0) a").addClass("cur");
+		$(".lot-table tr:gt(0)").remove();
+		$(".date option").remove()
+		reg=$("#choose_type .cur").attr("data-text");
+		lsod=$("#choose_type .cur").attr("data-type");
+		getCount(reg,"ball1",lsod) 
+	 })
+	
+	$("[data-pos]").click(function(){
+		var $this=$(this);
+		$(".date option").remove()
+		$(".lot-table tr:gt(0)").remove();
+		$("#choose_pos li a").removeClass("cur");
+		$this.addClass("cur");
+		m=$this.attr("data-pos");
+		lsod=$("#choose_type .cur").attr("data-type");
+		reg=$("#choose_type .cur").attr("data-text");	
+		getCount(reg,m,lsod)
+	}) 
+
+	$(".date").change(function(e){    //日期选择
+    	$(this).css("background-color","#FFFFCC");
+    	$(".lot-table tr:gt(0)").remove();
+    	m=$("#choose_pos .cur").attr("data-pos");
+		lsod=$("#choose_type .cur").attr("data-type");
+		reg=$("#choose_type .cur").attr("data-text");
+
+		date=e.target.value
+		getCount(reg,m,lsod,date)
+
+  });
+
+   
+});
+</script>
+</head>
+
+<body>
+
+<div id="lot-wrap" style="margin-bottom: 20px;"> 
+  <div class="dailyChangLongStatistics">
+    <div class="dcls_tool1" id="choose_type"> <a style="width: 87px;" data-type="dx" class="cur" data-text="大小">大小</a> <a data-type="dx" data-text="小大">小大</a> <a data-type="sd" data-text="单双">单双</a> <a data-type="sd" data-text="双单">双单</a>
+      <div style="clear: both"></div>
+    </div>
+    <div class="dcls_explanation"> 统计数据为间隔内，不包括两端，第一行和最后一行有点偏差</div>
+    <ul class="lot-number-omit">
+      <li class="ball" id="choose_pos">
+        <ul>
+          <li><a href="javascript:void(0);" data-pos="ball1" class="cur">冠军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball2">亚军</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball3">第三名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball4">第四名</a></li>
+          <li> | <a href="javascript:void(0);" data-pos="ball5">第五名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball6">第六名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball7">第七名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball8">第八名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball9">第九名</a></li>
+          <li filter="nolonghu"> | <a href="javascript:void(0);" data-pos="ball10">第十名</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div id="changlongdiv">
+ 
+      <table class="lot-table">
+        <tbody>
+          
+          <tr class="dcls_title2">
+	          <td width="120">日期
+	          <select class="date">
+				
+			  </select>
+	          </td>
+	          <td>
+	          只统计间隔之间球的出现次数，即除去首尾两个球
+	          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
