@@ -9,6 +9,12 @@
 <script src="js/paser.js"></script>
 <link rel="stylesheet" href="js/style.css">
 <script>
+function reg_f(types){
+	var types_ball=types.slice(0,1)
+    var rever_ball=types.slice(1,2)
+	var re = new RegExp(types_ball+types_ball+"(.*?)"+rever_ball+rever_ball,"g");
+	return re;
+}
 
 //数据处理函数
 function getCount(types,ball,dxsd,date){
@@ -31,9 +37,8 @@ function getCount(types,ball,dxsd,date){
 
 	 console.log(date+'开奖：'+balls)
      // result=fliter(balls,$reg,0,0,0)
-     types_ball=types.slice(0,1)
-     rever_ball=types.slice(1,2)
-     var reg =new RegExp(types_ball+types_ball+"(.*?)"+rever_ball+rever_ball,"g")
+     var types_ball=types.slice(0,1)
+     var reg = reg_f(types)
      var result  = balls.match(reg)
      console.log(result)
 
@@ -62,7 +67,7 @@ function getCount(types,ball,dxsd,date){
 			}
      		$box+=('<span class='+ballclass+'>'+l+'</span>')
      	})
-
+   //改规则需要修改 -2 or -3
      	$tr=$('<tr class="ball_list"><td>'+types_ball+'输赢: <strong>'+($total*2-list_total.length-2)+'</strong></td><td class="balls">'+$box+'</td></tr>')
         $tr.appendTo($(".lot-table tbody"))
      })
@@ -73,6 +78,7 @@ function getCount(types,ball,dxsd,date){
   	})
   	$("#total").text("今日输赢："+total)						   												   
 } 
+ 
 
 $(document).ready(function(){
 
@@ -87,7 +93,8 @@ $(document).ready(function(){
 		$(".date option").remove()
 		reg=$("#choose_type .cur").attr("data-text");
 		lsod=$("#choose_type .cur").attr("data-type");
-		getCount(reg,"ball1",lsod) 
+		getCount(reg,"ball1",lsod);
+		getallCount(reg,"ball1",lsod)
 	 })
 	
 	$("[data-pos]").click(function(){
@@ -100,6 +107,7 @@ $(document).ready(function(){
 		lsod=$("#choose_type .cur").attr("data-type");
 		reg=$("#choose_type .cur").attr("data-text");	
 		getCount(reg,m,lsod)
+		getallCount(reg,m,lsod)
 	}) 
 
 	$(".date").change(function(e){    //日期选择
@@ -113,8 +121,42 @@ $(document).ready(function(){
 		getCount(reg,m,lsod,date)
 
   });
+//all统计
+function getallCount(types,ball,dxsd){
+	$dxsd=dxsd
+	$reg=reg
+	$ball=ball
 
-   
+	var resulttotal = 0
+	list_array=dxsd_array($dxsd) 
+
+	$.each(list_array, function(key,item){  //日期
+		var alltotal = 0;
+		var balls="",list_array="",result=""
+
+		 ball_t=item[$ball].join().replace(/,/g, "") //获取球
+	     balls=ball_t.split("").reverse().join("")
+		 var types_ball=types.slice(0,1)
+	     var reg = reg_f(types)
+	     var result  = balls.match(reg)
+
+	     $.each(result, function(index,list){
+	     	$box=""
+	     	$total=""
+	     	list_total=list.toString().split("")
+	     	$.each(list_total, function(i,l){
+	     		if(l==types_ball){$total++}
+	 		})
+	 		 //改规则需要修改 -2 or -3
+	     	var total = $total*2-list_total.length-2;
+	     	alltotal +=	total;//每日统计
+	     })    
+	   resulttotal +=alltotal;  
+	   console.log(key,alltotal)
+	}) 
+	
+	$("#alltotal").text("全部数据输赢："+resulttotal) 					   												   
+}
 });
 </script>
 </head>
@@ -154,8 +196,9 @@ $(document).ready(function(){
 				
 			  </select>
 	          </td>
-	          <td id="total">
-	          只统计间隔之间球的出现次数，即除去首尾两个球
+	          <td>
+	          <span id="total"></span>
+	           <span id="alltotal">全部数据</span>
 	          </td>
           </tr>
         </tbody>
