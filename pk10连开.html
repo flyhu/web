@@ -37,9 +37,6 @@ function getCount(types,ball,dxsd,date){
      var result  = balls.match(reg)
      console.log(result)
 
-     
-
-
      $.each(result, function(index,list){
 
      	$box=""
@@ -66,10 +63,15 @@ function getCount(types,ball,dxsd,date){
      		$box+=('<span class='+ballclass+'>'+l+'</span>')
      	})
 
-     	$tr=$('<tr class="ball_list"><td>'+types_ball+'输赢: <b><span>'+($total*2-list_total.length-2)+'</span></b></td><td class="balls">'+$box+'</td></tr>')
+     	$tr=$('<tr class="ball_list"><td>'+types_ball+'输赢: <strong>'+($total*2-list_total.length-2)+'</strong></td><td class="balls">'+$box+'</td></tr>')
         $tr.appendTo($(".lot-table tbody"))
      })
-  							   												   
+  	//统计
+  	var total = 0;
+  	($(".ball_list").find("strong")).each(function(){
+  		total +=parseInt($(this).text());
+  	})
+  	$("#total").text("今日输赢："+total)						   												   
 } 
 
 $(document).ready(function(){
@@ -152,7 +154,7 @@ $(document).ready(function(){
 				
 			  </select>
 	          </td>
-	          <td>
+	          <td id="total">
 	          只统计间隔之间球的出现次数，即除去首尾两个球
 	          </td>
           </tr>
